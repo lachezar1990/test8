@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="29879c47841e468cb224d188a49bfc3d" Name="Diagram1">
+        <EntityTypeShape EntityType="DiplomnaModel.Address" Width="1.5" PointX="5.25" PointY="25.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="DiplomnaModel.City" Width="1.5" PointX="0.75" PointY="22.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="DiplomnaModel.Company" Width="1.5" PointX="3" PointY="25.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="DiplomnaModel.Email" Width="1.5" PointX="9.75" PointY="16.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="DiplomnaModel.Employee" Width="1.5" PointX="12" PointY="36.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="DiplomnaModel.Favourite" Width="1.5" PointX="9.75" PointY="18.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="DiplomnaModel.Neighbourhood" Width="1.5" PointX="3" PointY="30.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="DiplomnaModel.OrderDetail" Width="1.5" PointX="15" PointY="31.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="DiplomnaModel.Order" Width="1.5" PointX="9.75" PointY="29.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="DiplomnaModel.Phone" Width="1.5" PointX="9.75" PointY="21.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="DiplomnaModel.Position" Width="1.5" PointX="9.75" PointY="37" IsExpanded="true" />
+        <EntityTypeShape EntityType="DiplomnaModel.Rating" Width="1.5" PointX="9.75" PointY="40.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="DiplomnaModel.Reservation" Width="1.5" PointX="0.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="DiplomnaModel.SalonImage" Width="1.5" PointX="9.75" PointY="44.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="DiplomnaModel.Salon" Width="1.5" PointX="7.5" PointY="24.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="DiplomnaModel.SalonSchedule" Width="1.5" PointX="9.75" PointY="12.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="DiplomnaModel.ServiceImage" Width="1.5" PointX="15" PointY="26.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="DiplomnaModel.Service" Width="1.5" PointX="12.75" PointY="25.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="DiplomnaModel.ServiceType" Width="1.5" PointX="10.5" PointY="26.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="DiplomnaModel.sysdiagram" Width="1.5" PointX="2.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="DiplomnaModel.EmplWithPosition" Width="1.5" PointX="2.75" PointY="3.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="DiplomnaModel.ReservationsView" Width="1.5" PointX="4.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="DiplomnaModel.SalonDetailsInfo" Width="1.5" PointX="6.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="DiplomnaModel.SalonsMainScreenMobile" Width="1.5" PointX="6.75" PointY="5.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="DiplomnaModel.ServicesForDetailsPage" Width="1.5" PointX="0.75" PointY="7.75" IsExpanded="true" />
+        <AssociationConnector Association="DiplomnaModel.FK_Addresses_Cities" ManuallyRouted="false" />
+        <AssociationConnector Association="DiplomnaModel.FK_Addresses_Neighbourhoods" ManuallyRouted="false" />
+        <AssociationConnector Association="DiplomnaModel.FK_Salons_Addresses" ManuallyRouted="false" />
+        <AssociationConnector Association="DiplomnaModel.FK_Neighbourhoods_Cities" ManuallyRouted="false" />
+        <AssociationConnector Association="DiplomnaModel.FK_Salons_Companies" ManuallyRouted="false" />
+        <AssociationConnector Association="DiplomnaModel.FK_Emails_Salons" ManuallyRouted="false" />
+        <AssociationConnector Association="DiplomnaModel.FK_Employees_Positions" ManuallyRouted="false" />
+        <AssociationConnector Association="DiplomnaModel.FK_OrderDetails_Employees" ManuallyRouted="false" />
+        <AssociationConnector Association="DiplomnaModel.FK_Favourites_Salons" ManuallyRouted="false" />
+        <AssociationConnector Association="DiplomnaModel.FK_OrderDetails_Orders" ManuallyRouted="false" />
+        <AssociationConnector Association="DiplomnaModel.FK_OrderDetails_Services" ManuallyRouted="false" />
+        <AssociationConnector Association="DiplomnaModel.FK_Orders_Salons" ManuallyRouted="false" />
+        <AssociationConnector Association="DiplomnaModel.FK_Phones_Salons" ManuallyRouted="false" />
+        <AssociationConnector Association="DiplomnaModel.FK_Positions_Salons" ManuallyRouted="false" />
+        <AssociationConnector Association="DiplomnaModel.FK_Ratings_Salons" ManuallyRouted="false" />
+        <AssociationConnector Association="DiplomnaModel.FK_SalonImages_Salons" ManuallyRouted="false" />
+        <AssociationConnector Association="DiplomnaModel.FK_Services_Salons" ManuallyRouted="false" />
+        <AssociationConnector Association="DiplomnaModel.FK_ServiceImages_Services" ManuallyRouted="false" />
+        <AssociationConnector Association="DiplomnaModel.FK_Services_ServiceTypes" ManuallyRouted="false" />
+        <AssociationConnector Association="DiplomnaModel.FK_Companies_Cities" />
+        <AssociationConnector Association="DiplomnaModel.FK_Neighbourhoods_Cities1" />
+        <AssociationConnector Association="DiplomnaModel.FK_SalonSchedule_Salons" />
+        <EntityTypeShape EntityType="DiplomnaModel.EmployeeSchedule" Width="1.5" PointX="8.75" PointY="0.75" />
+        <AssociationConnector Association="DiplomnaModel.FK_EmployeeSchedule_Employees" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

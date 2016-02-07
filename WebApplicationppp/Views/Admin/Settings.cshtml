@@ -1,0 +1,1026 @@
+﻿<div class="row first-item">
+    <div class="col-sm-12">
+        <tabset justified="true">
+            <tab heading="Данни за фирмата">
+                <div class="well">
+                    <alert type="{{alertComp.type}}" close="closeAlert($index)" ng-show="alertComp">{{alertComp.msg}}</alert>
+                    <form class="form-horizontal" ng-hide="loadingCompanyForm" name="company_data"
+                          novalidate ng-submit="companyFormSubmit(company_data, company)" role="form">
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label" for="inputFirmName">Име на фирмата</label>
+                            <div class="col-sm-9">
+                                <input type="text" class="form-control" id="inputFirmName" name="CompanyName"
+                                       maxlength="500" required ng-model="company.CompanyName" placeholder="Име на фирмата">
+                                <span class="text-bold text-danger"
+                                      ng-show="company_data.CompanyName.$invalid && (!company_data.CompanyName.$pristine || company_data.$submitted)">
+                                    Полето е задължително!
+                                </span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label" for="inputFirmEmail">E-mail</label>
+                            <div class="col-sm-9">
+                                <input type="email" class="form-control" id="inputFirmEmail" name="Email"
+                                       maxlength="150" required ng-model="company.Email" placeholder="E-mail">
+                                <span class="text-bold text-danger"
+                                      ng-show="company_data.Email.$error.required && (!company_data.Email.$pristine || company_data.$submitted)">
+                                    Полето е задължително!
+                                </span>
+                                <span class="text-bold text-danger"
+                                      ng-show="company_data.Email.$error.email && (!company_data.Email.$pristine || company_data.$submitted)">
+                                    Моля въведете валидна електронна поща!
+                                </span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label" for="ddlCity">Населено място</label>
+                            <div class="col-sm-9">
+                                <select ng-model="company.CityID" id="ddlCity" name="City" class="form-control hidden-placeholder-select"
+                                        ng-options="city.CityID as city.CityName for city in cities" required>
+                                    <option selected disabled value="">Моля, изберете...</option>
+
+                                </select>
+                                <span class="text-bold text-danger"
+                                      ng-show="company_data.City.$invalid && (!company_data.City.$pristine || company_data.$submitted)">
+                                    Полето е задължително!
+                                </span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label" for="inputFirmAddress">Адрес на фирмата</label>
+                            <div class="col-sm-9">
+                                <input type="text" class="form-control" id="inputFirmAddress" name="CompanyAddress"
+                                       maxlength="500" required ng-model="company.CompanyAddress" placeholder="Адрес на фирмата">
+                                <span class="text-bold text-danger"
+                                      ng-show="company_data.CompanyAddress.$invalid && (!company_data.CompanyAddress.$pristine || company_data.$submitted)">
+                                    Полето е задължително!
+                                </span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label" for="inputFirmPhones">Телефони</label>
+                            <div class="col-sm-9">
+                                <input type="text" class="form-control" id="inputFirmPhones" placeholder="Телефони" name="CompanyPhones"
+                                       maxlength="150" required ng-model="company.CompanyPhones">
+                                <span class="text-bold text-danger"
+                                      ng-show="company_data.CompanyPhones.$invalid && (!company_data.CompanyPhones.$pristine || company_data.$submitted)">
+                                    Полето е задължително!
+                                </span>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <button type="submit" class="btn btn-default">
+                                    <span class="glyphicon glyphicon-floppy-save"></span> Запази
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                    <div class="loading-indicator" ng-show="loadingCompanyForm">
+                        <svg class="spinner" width="65px" height="65px" viewBox="0 0 66 66" xmlns="http://www.w3.org/2000/svg">
+                            <circle class="path" fill="none" stroke-width="6" stroke-linecap="round" cx="33" cy="33" r="30"></circle>
+                        </svg>
+                    </div>
+                </div>
+            </tab>
+
+            <!-- Начало на салоните -->
+
+            <tab heading="Салони" disabled="!company">
+                <div class="well">
+                    <div class="alert alert-info alert-dismissible" role="alert" ng-show="salonForForm.AdminMessage">
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <strong>Съобщение от администратор!</strong> {{salonForForm.AdminMessage}}
+                    </div>
+                    <alert type="warning" ng-show="showAlertForSalons">
+                        <strong>Внимание!</strong> Все още не сте добавили нито един салон!
+                    </alert>
+                    <alert type="warning" ng-show="!showAlertForSalons && !salon.SalonID">
+                        Моля изберете салон и натиснете „Зареди салон“!
+                    </alert>
+                    <alert type="{{alertSalon.type}}" close="closeSalonAlert()" ng-show="alertSalon">{{alertSalon.msg}}</alert>
+                    <div class="form-horizontal">
+                        <div class="row">
+                            <div class="col-md-3">
+                                <select ng-model="salon.SalonID" id="ddlSalons" name="Salons" class="form-control hidden-placeholder-select"
+                                        ng-options="salon.SalonID as salon.SalonName for salon in salonsForDdl" required>
+                                    <option selected disabled value="">Моля, изберете салон...</option>
+
+                                </select>
+                            </div>
+                            <div class="col-md-9" style="margin-bottom: 20px;">
+                                <button type="button" class="btn btn-default" ng-click="loadSalon(salon.SalonID)">
+                                    <span class="glyphicon glyphicon-refresh"></span> Зареди салон
+                                </button>
+                                <button type="button" class="btn btn-success" ng-click="addNewSalon()">
+                                    <span class="glyphicon glyphicon-plus"></span> Добави салон
+                                </button>
+                                <div class="checkbox checkbox-success checkbox-isVisible" ng-show="salon.SalonID">
+                                    <input type="checkbox" id="cbIsVisible" ng-model="salonForForm.VisibleForUsers">
+                                    <label for="cbIsVisible">
+                                        Видим ли е?
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <form class="form-horizontal" ng-show="showSalonForm && !loadingSalonsForm" role="form" name="salon_data"
+                          novalidate ng-submit="salonFormSubmit(salon_data, salonForForm)">
+                        <div class="row">
+                            <div class="col-md-5" ng-show="salonForForm.SalonID">
+                                <div class="thumbnail background-transperant">
+                                    <img ng-src="{{MainImagePath}}" ng-show="MainImagePath" />
+                                    <span ng-hide="MainImagePath">Не сте добавили главна снимка!</span>
+
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <input type="file" nv-file-select="" uploader="uploader" multiple />
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <table class="table table-pic">
+
+                                            <thead>
+                                                <tr>
+                                                    <th>Име</th>
+                                                    <th ng-show="uploader.isHTML5">Размер</th>
+                                                    <th ng-show="uploader.isHTML5">Прогр.</th>
+                                                    <th>Статус</th>
+                                                    <th>Действия</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr ng-repeat="item in uploader.queue">
+                                                    <td class="text-center">
+                                                        <strong class=" display-block">{{ item.file.name | limitTo: 15 }}<span ng-show="item.file.name.length > 15">...</span></strong>
+                                                        <!-- Image preview -->
+                                                        <!--auto height-->
+                                                        <!--<div ng-thumb="{ file: item.file, width: 100 }"></div>-->
+                                                        <!--auto width-->
+                                                        <div ng-show="uploader.isHTML5 && !item.ImageID" ng-thumb="{ file: item._file, width: 80 }"></div>
+                                                        <!--fixed width and height -->
+                                                        <!--<div ng-thumb="{ file: item.file, width: 100, height: 100 }"></div>-->
+                                                        <img ng-src="{{item.ImagePath}}" ng-show="item.ImageID" alt="{{item.ImageName}}" />
+
+                                                    </td>
+                                                    <td ng-show="uploader.isHTML5" nowrap>{{ item.file.size/1024/1024|number:2 }} МБ</td>
+                                                    <td ng-show="uploader.isHTML5">
+                                                        <div class="progress" style="margin-bottom: 0;">
+                                                            <div class="progress-bar" role="progressbar" ng-style="{ 'width': item.progress + '%' }"></div>
+                                                        </div>
+                                                    </td>
+                                                    <td class="text-center">
+                                                        <span ng-show="item.isSuccess"><i class="glyphicon glyphicon-ok"></i></span>
+                                                        <span ng-show="item.isCancel"><i class="glyphicon glyphicon-ban-circle"></i></span>
+                                                        <span ng-show="item.isError"><i class="glyphicon glyphicon-remove"></i></span>
+                                                    </td>
+                                                    <td nowrap class="text-center">
+                                                        <button type="button" class="btn btn-success btn-xs" ng-click="item.upload()" ng-disabled="item.isReady || item.isUploading || item.isSuccess">
+                                                            <span class="glyphicon glyphicon-upload"></span>
+                                                        </button>
+                                                        <button type="button" class="btn btn-warning btn-xs" ng-click="item.cancel()" ng-disabled="!item.isUploading">
+                                                            <span class="glyphicon glyphicon-ban-circle"></span>
+                                                        </button>
+                                                        <button type="button" class="btn btn-danger btn-xs" ng-hide="item.ImageID" ng-click="item.remove()">
+                                                            <span class="glyphicon glyphicon-trash"></span>
+                                                        </button>
+                                                        <button type="button" class="btn btn-danger btn-xs" ng-show="item.ImageID" ng-click="removeFromDb(item,$index)">
+                                                            <span class="glyphicon glyphicon-trash"></span>
+                                                        </button>
+                                                        <br /><br />
+                                                        <button type="button" class="btn btn-success btn-xs" ng-show="item.ImageID && !item.IsMain" ng-click="makeMain(item, $index)">
+                                                            <i class="fa fa-home"></i> Главна
+                                                        </button>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+
+                                <div class="text-center">
+                                    <div>
+                                        Прогрес:
+                                        <div class="progress">
+                                            <div class="progress-bar" role="progressbar" ng-style="{ 'width': uploader.progress + '%' }"></div>
+                                        </div>
+                                    </div>
+                                    <button type="button" class="btn btn-success btn-s" ng-click="uploader.uploadAll()" ng-disabled="!uploader.getNotUploadedItems().length">
+                                        <span class="glyphicon glyphicon-upload"></span> Качи всички
+                                    </button>
+                                    <p ng-show="FileTypes" class="text-bold text-center colour-red">Моля прикачвайте само снимки!</p>
+                                    @*<button type="button" class="btn btn-warning btn-s" ng-click="uploader.cancelAll()" ng-disabled="!uploader.isUploading">
+                                    <span class="glyphicon glyphicon-ban-circle"></span> Откажи всички
+                                </button>*@
+                                    @*<button type="button" class="btn btn-danger btn-s" ng-click="uploader.clearQueue()" ng-disabled="!uploader.queue.length">
+                                    <span class="glyphicon glyphicon-trash"></span> Премахни всички
+                                </button>*@
+                                </div>
+
+                            </div>
+                            <div class="col-md-7">
+                                <div class="form-group">
+                                    <label class="col-md-3 control-label">Име на салона</label>
+                                    <div class="col-md-9">
+                                        <input type="text" class="form-control" id="inputSalonName" placeholder="Име на салона"
+                                               name="SalonName" required maxlength="500" ng-model="salonForForm.SalonName">
+                                        <span class="text-bold text-danger"
+                                              ng-show="salon_data.SalonName.$invalid && (!salon_data.SalonName.$pristine || salon_data.$submitted)">
+                                            Полето е задължително!
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-md-3 control-label">E-mail</label>
+                                    <div class="col-md-9">
+                                        <input type="email" class="form-control" id="inputSalonEmail" placeholder="E-mail" name="SalonEmail"
+                                               required ng-model="salonForForm.Email" maxlength="150" />
+                                        <span class="text-bold text-danger"
+                                              ng-show="salon_data.SalonEmail.$error.required && (!salon_data.SalonEmail.$pristine || salon_data.$submitted)">
+                                            Полето е задължително!
+                                        </span>
+                                        <span class="text-bold text-danger"
+                                              ng-show="salon_data.SalonEmail.$error.email && (!salon_data.SalonEmail.$pristine || salon_data.$submitted)">
+                                            Моля въведете валидна електронна поща!
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-md-3 control-label">Сайт</label>
+                                    <div class="col-md-9">
+                                        <input type="url" class="form-control" id="inputSalonSiteUrl" placeholder="Адрес на сайт (http://пример.com)" name="SiteUrl"
+                                               required ng-model="salonForForm.SiteUrl" maxlength="250" />
+                                        <span class="text-bold text-danger"
+                                              ng-show="salon_data.SiteUrl.$error.required && (!salon_data.SiteUrl.$pristine || salon_data.$submitted)">
+                                            Полето е задължително!
+                                        </span>
+                                        <span class="text-bold text-danger"
+                                              ng-show="salon_data.SiteUrl.$error.url && (!salon_data.SiteUrl.$pristine || salon_data.$submitted)">
+                                            Моля въведете вален URL адрес!
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-md-3 control-label" for="ddlSCity">Населено място</label>
+                                    <div class="col-md-9">
+                                        <select ng-model="salonForForm.CityID" id="ddlSCity" name="SalonCity" class="form-control hidden-placeholder-select"
+                                                ng-options="city.CityID as city.CityName for city in cities" required ng-change="changeDdlSCity(salonForForm.CityID)">
+                                            <option selected disabled value="">Моля, изберете...</option>
+
+                                        </select>
+                                        <span class="text-bold text-danger"
+                                              ng-show="salon_data.City.$invalid && (!salon_data.City.$pristine || salon_data.$submitted)">
+                                            Полето е задължително!
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="form-group" ng-show="hasNeighbourhoods">
+                                    <label class="col-md-3 control-label" for="ddlSNeighbourhood">Квартал</label>
+                                    <div class="col-md-9">
+                                        <select ng-model="salonForForm.NeighbourhoodID" id="ddlSNeighbourhood"
+                                                name="SalonNeighbourhood" class="form-control hidden-placeholder-select"
+                                                ng-options="neighbourhood.NeighbourhoodID as neighbourhood.NeighbourhoodName for neighbourhood in neighbourhoods">
+                                            <option selected disabled value="">Моля, изберете...</option>
+
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-md-3 control-label">Адрес на салона</label>
+                                    <div class="col-md-9">
+                                        <div class="col-md-4">
+                                            <input type="text" class="form-control" id="inputSalonStreet" placeholder="Улица..."
+                                                   name="SalonStreet" maxlength="250" ng-model="salonForForm.SalonStreet">
+                                        </div>
+                                        <div class="col-md-2">
+                                            <input type="text" class="form-control" id="inputSalonFlat" placeholder="Блок..."
+                                                   name="SalonFlat" maxlength="50" ng-model="salonForForm.SalonFlat">
+                                        </div>
+                                        <div class="col-md-2">
+                                            <input type="text" class="form-control" id="inputSalonNumber" placeholder="№..."
+                                                   name="SalonNumber" maxlength="20" ng-model="salonForForm.SalonNumber">
+                                        </div>
+                                        <div class="col-md-2">
+                                            <input type="text" class="form-control" id="inputSalonEntrance" placeholder="Вход..."
+                                                   name="SalonEntrance" maxlength="10" ng-model="salonForForm.SalonEntrance">
+                                        </div>
+                                        <div class="col-md-2">
+                                            <input type="text" class="form-control" id="inputSalonApartament" placeholder="Апартамент..."
+                                                   name="SalonApartament" maxlength="10" ng-model="salonForForm.SalonApartment">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-md-3 control-label" for="inputSalonPhones">Телефони</label>
+                                    <div class="col-md-9">
+                                        <input type="text" class="form-control" id="inputSalonPhones" placeholder="Телефони"
+                                               name="SalonPhones" ng-pattern="/^\d+(\-\d+)?(\,(\d+(\-\d+)?))*$/" ng-model="salonForForm.SalonPhones" maxlength="250" required>
+                                        <span class="text-bold text-danger"
+                                              ng-show="salon_data.SalonPhones.$error.required && (!salon_data.SalonPhones.$pristine || salon_data.$submitted)">
+                                            Полето е задължително!
+                                        </span>
+                                        <span class="text-bold text-danger"
+                                              ng-show="salon_data.SalonPhones.$error.pattern && (!salon_data.SalonPhones.$pristine || salon_data.$submitted)">
+                                            Моля въведете валидни телефонни номера. Телефоните трябва да са отделени един от друг със запетая без интервали!
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-md-3 control-label" for="inputSalonDescription">Описание</label>
+                                    <div class="col-md-9">
+                                        <textarea class="form-control" id="inputSalonDescription" placeholder="Описание за салона"
+                                                  name="SalonDescription" required maxlength="500" rows="2"
+                                                  ng-model="salonForForm.SalonDescription"></textarea>
+                                        <span class="text-bold text-danger"
+                                              ng-show="salon_data.SalonDescription.$invalid && (!salon_data.SalonDescription.$pristine || salon_data.$submitted)">
+                                            Полето е задължително!
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-md-3 control-label">Работно време</label>
+                                    <div class="col-md-7">
+                                        <p class="form-control-static" ng-class="{'text-danger text-bold' : redTextWorkingTime}">
+                                            {{workTimeText}}
+                                        </p>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <button type="button" class="btn btn-default btn-settings-change" ng-click="openModal()">
+                                            <span class="glyphicon glyphicon-time"></span> Промени
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-md-12 text-right">
+                                        <button type="submit" class="btn btn-default">
+                                            <span class="glyphicon glyphicon-floppy-save"></span> Запази
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+
+                    </form>
+                    <div class="loading-indicator" ng-show="loadingSalonsForm">
+                        <svg class="spinner" width="65px" height="65px" viewBox="0 0 66 66" xmlns="http://www.w3.org/2000/svg">
+                            <circle class="path" fill="none" stroke-width="6" stroke-linecap="round" cx="33" cy="33" r="30"></circle>
+                        </svg>
+                    </div>
+                </div>
+            </tab>
+            <tab heading="Персонал" disabled="!company">
+                <div class="well">
+                    <alert type="warning" ng-show="showAlertForSalons">
+                        <strong>Внимание!</strong> Все още не сте добавили нито един салон!
+                    </alert>
+                    <alert type="warning" ng-show="!showAlertForSalons && !salonForE.SalonID">
+                        Моля изберете салон и натиснете „Зареди салон“!
+                    </alert>
+                    <alert type="{{alertEmpl.type}}" close="closeEmplAlert()" ng-show="alertEmpl">{{alertEmpl.msg}}</alert>
+                    <div class="row">
+                        <div class="col-sm-3">
+                            <select ng-model="salonForE.SalonID" id="ddlESalon" name="ESalon" class="form-control hidden-placeholder-select"
+                                    ng-options="salonForE.SalonID as salonForE.SalonName for salonForE in salonsForDdl" required>
+                                <option selected disabled value="">Моля, изберете салон...</option>
+
+                            </select>
+                        </div>
+                        <div class="col-sm-9">
+                            <button type="button" class="btn btn-default" id="btnLoadEmployees" ng-click="loadSalonEmployees(salonForE.SalonID)">
+                                <span class="glyphicon glyphicon-refresh"></span> Зареди салон
+                            </button>
+                            <button type="button" class="btn btn-success" ng-click="openEmplModal(salonForE.SalonID, true)" ng-show="salonForE.SalonID && positionsCount > 0">
+                                <span class="glyphicon glyphicon-plus"></span> Добави служител
+                            </button>
+                            <button type="button" class="btn btn-success" ng-click="openPosModal(salonForE.SalonID)" ng-show="salonForE.SalonID && positionsCount !== -1">
+                                Позиции <span class="badge">{{positionsCount}}</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="table-container" ng-hide="loadingEmplForm">
+                    <table st-table="rowCollection" class="table table-striped table-hover table-reserve">
+                        <thead class="table-header">
+                            <tr>
+                                <th st-sort="FullName">Име на служителя</th>
+                                <th st-sort="Position">Позиция</th>
+                                <th st-sort="WorkDay">Работно време</th>
+                                <th style="width:80px;">&nbsp;</th>
+                                <th style="width:80px;">&nbsp;</th>
+                            </tr>
+
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="empl in salonEmpl">
+
+                                <td>{{empl.FirstName + ' ' + empl.MiddleName + ' ' + empl.LastName}}</td>
+                                <td>{{empl.PositionName}}</td>
+                                <td class="text-center">
+                                    <span class="form-control-static" ng-class="{'text-danger text-bold' : empl.redTextWorkingTime}">
+                                        {{empl.workTimeText}}
+                                    </span>
+                                    <button type="button" class="btn btn-primary btn-sm" ng-click="openEmplTimeModal($index)">
+                                        <span class="glyphicon glyphicon-edit"></span>
+                                    </button>
+                                </td>
+                                <td>
+                                    <button type="button" class="btn btn-primary btn-sm" ng-click="openEmplModal(salonForE.SalonID, false, empl.EmployeeID)">
+                                        <i class="fa fa-info-circle"></i> Детайли
+                                    </button>
+
+                                </td>
+                                <td>
+                                    <button type="button" class="btn btn-danger btn-sm" ng-click="delEmpl(empl.EmployeeID, $index)">
+                                        <i class="fa fa-times"></i> Изтрий
+                                    </button>
+
+                                </td>
+                            </tr>
+                            <tr ng-show="noEmplForSalon">
+                                <td colspan="4">
+                                    Няма служители за този салон
+                                </td>
+                            </tr>
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <td colspan="5" class="text-center">
+                                    <div st-pagination="" st-items-by-page="itemsByPage" st-displayed-pages="7"></div>
+                                </td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+                <div class="loading-indicator" ng-show="loadingEmplForm">
+                    <svg class="spinner" width="65px" height="65px" viewBox="0 0 66 66" xmlns="http://www.w3.org/2000/svg">
+                        <circle class="path" fill="none" stroke-width="6" stroke-linecap="round" cx="33" cy="33" r="30"></circle>
+                    </svg>
+                </div>
+            </tab>
+            <tab heading="Услуги" disabled="!company">
+                <div class="well">
+                    <alert type="warning" ng-show="showAlertForSalons">
+                        <strong>Внимание!</strong> Все още не сте добавили нито един салон!
+                    </alert>
+                    <alert type="warning" ng-show="!showAlertForSalons && !salonForSer.SalonID">
+                        Моля изберете салон и натиснете „Зареди салон“!
+                    </alert>
+                    <alert type="{{alertSer.type}}" close="closeSerAlert()" ng-show="alertSer">{{alertSer.msg}}</alert>
+                    <div class="row">
+                        <div class="col-sm-3">
+                            <select ng-model="salonForSer.SalonID" id="ddlSerSalon" name="SerSalon" class="form-control hidden-placeholder-select"
+                                    ng-options="salonForSer.SalonID as salonForSer.SalonName for salonForSer in salonsForDdl" required>
+                                <option selected disabled value="">Моля, изберете салон...</option>
+
+                            </select>
+                        </div>
+                        <div class="col-sm-9">
+                            <button type="button" class="btn btn-default" id="btnLoadSer" ng-click="loadSalonSer(salonForSer.SalonID)">
+                                <span class="glyphicon glyphicon-refresh"></span> Зареди салон
+                            </button>
+                            <button type="button" class="btn btn-success" ng-click="openServicesModal(salonForSer.SalonID)" ng-show="salonForSer.SalonID && salonServices.length >= 0">
+                                <span class=" glyphicon glyphicon-plus">
+                                </span> Добави услуга
+                            </button>
+                            @*<button type="button" class="btn btn-success" ng-click="openTypesModal()">
+                            Добави тип <span class="badge">4</span>
+                        </button>*@
+                        </div>
+                    </div>
+                </div>
+                <div class="table-container" ng-hide="loadingSerForm">
+                    <table st-table="rowCollection" class="table table-striped table-hover table-reserve">
+                        <thead class="table-header">
+                            <tr>
+                                <th style="width: 30px;">&nbsp;</th>
+                                <th>Име на услугата</th>
+                                <th>Тип</th>
+                                <th>Времетраене</th>
+                                <th>Подходяща за</th>
+                                <th style="width:80px;">&nbsp;</th>
+                                <th style="width:80px;">&nbsp;</th>
+
+                            </tr>
+
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="ser in salonServices">
+                                <td>
+                                    <img ng-src="{{ 'Images/ServiceImages/' + ser.ImageUrl + '?w=25&h=25&mode=max' }}" ng-show="ser.ImageUrl" alt="{{ser.ServiceName}}" />
+                                </td>
+                                <td>{{ser.ServiceName}}</td>
+                                <td>{{ser.ServiceTypeName}}</td>
+                                <td style="text-align:center;">
+                                    {{ser.Time | limitTo: 5}}
+                                </td>
+                                <td>
+                                    <i class="fa fa-female" style="color:deeppink;" ng-show="ser.Women"></i>
+                                    <i class="fa fa-male" style="color: cadetblue;" ng-show="ser.Men"></i>
+                                    <i class="fa fa-child" style="color: darkorange;" ng-show="ser.Kids"></i>
+                                </td>
+                                <td>
+                                    <button type="button" class="btn btn-primary btn-sm" ng-click="openServicesModal(ser.SalonID, ser.ServiceID)">
+                                        Детайли
+                                    </button>
+                                </td>
+                                <td>
+                                    <button type="button" class="btn btn-danger btn-sm" ng-click="delSer(ser.ServiceID, $index)">
+                                        <i class="fa fa-times"></i> Изтрий
+                                    </button>
+
+                                </td>
+                            </tr>
+                            <tr ng-show="noSerForSalon">
+                                <td colspan="7">
+                                    Няма услуги за този салон
+                                </td>
+                            </tr>
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <td colspan="7" class="text-center">
+                                    <div st-pagination="" st-items-by-page="itemsByPage" st-displayed-pages="7"></div>
+                                </td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+                <div class="loading-indicator" ng-show="loadingSerForm">
+                    <svg class="spinner" width="65px" height="65px" viewBox="0 0 66 66" xmlns="http://www.w3.org/2000/svg">
+                        <circle class="path" fill="none" stroke-width="6" stroke-linecap="round" cx="33" cy="33" r="30"></circle>
+                    </svg>
+                </div>
+            </tab>
+        </tabset>
+
+        <div ng-show="isLoading" class="loading-indicator"></div>
+    </div>
+</div>
+
+<script type="text/ng-template" id="WorkingTimeModal.html">
+    <!-- Modal -->
+
+    <div class="modal-header">
+        <button type="button" class="close" ng-click="cancel()"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">Работно време</h4>
+    </div>
+    <div class="modal-body">
+        <div class="row" ng-show="!holiday">
+            <div class="col-sm-12">
+                <select class="form-control" ng-change="changeDay(dayOfWeek)" ng-init="dayOfWeek = 1; changeDay(1)" ng-model="dayOfWeek">
+                    <option selected value="1">Понеделник</option>
+                    <option value="2">Вторник</option>
+                    <option value="3">Сряда</option>
+                    <option value="4">Четвъртък</option>
+                    <option value="5">Петък</option>
+                    <option value="6">Събота</option>
+                    <option value="7">Неделя</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-12 h4 text-center">
+                Работно време
+            </div>
+        </div>
+        <div class="row" ng-show="!hideTimes">
+            <div class="col-sm-6 h5 text-center">
+                От
+            </div>
+            <div class="col-sm-6 h5 text-center">
+                До
+            </div>
+        </div>
+        <div class="row" ng-show="!hideTimes">
+
+            <div class="col-sm-6">
+
+                <timepicker class="margin-0-auto" ng-model="selectedDay.StartTime" hour-step="1" minute-step="10" show-meridian="false"></timepicker>
+
+            </div>
+
+            <div class="col-sm-6 text-center">
+
+                <timepicker class="margin-0-auto" ng-model="selectedDay.EndTime" hour-step="1" minute-step="10" show-meridian="false"></timepicker>
+
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-12 text-center">
+                <div class="checkbox checkbox-success">
+                    <input type="checkbox" id="cbHolidayDay" name="cbHolidayDay" ng-model="selectedDay.Holiday" ng-change="changeHoliday(selectedDay.Holiday)">
+                    <label for="cbHolidayDay">
+                        Почивен ден
+                    </label>
+                </div>
+            </div>
+            
+        </div>
+       
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-default" ng-click="cancel()">Затвори</button>
+        <button type="button" class="btn btn-success" ng-click="ok()">Приеми</button>
+    </div>
+
+</script>
+
+<script type="text/ng-template" id="EmplWorkingTimeModal.html">
+    <!-- Modal -->
+
+    <div class="modal-header">
+        <button type="button" class="close" ng-click="cancel()"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">Работно време на {{items.FirstName + ' ' + items.LastName}}</h4>
+    </div>
+    <div class="modal-body">
+        <div class="row" ng-show="!holiday">
+            <div class="col-sm-12">
+                <select class="form-control" ng-change="changeDay(dayOfWeek)" ng-init="dayOfWeek = 1; changeDay(1)" ng-model="dayOfWeek">
+                    <option selected value="1">Понеделник</option>
+                    <option value="2">Вторник</option>
+                    <option value="3">Сряда</option>
+                    <option value="4">Четвъртък</option>
+                    <option value="5">Петък</option>
+                    <option value="6">Събота</option>
+                    <option value="7">Неделя</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-12 h4 text-center">
+                Работно време
+            </div>
+        </div>
+        <div class="row" ng-show="!hideTimes">
+            <div class="col-sm-6 h5 text-center">
+                От
+            </div>
+            <div class="col-sm-6 h5 text-center">
+                До
+            </div>
+        </div>
+        <div class="row" ng-show="!hideTimes">
+
+            <div class="col-sm-6">
+
+                <timepicker class="margin-0-auto" ng-model="selectedDay.StartTime" hour-step="1" minute-step="10" show-meridian="false"></timepicker>
+
+            </div>
+
+            <div class="col-sm-6 text-center">
+
+                <timepicker class="margin-0-auto" ng-model="selectedDay.EndTime" hour-step="1" minute-step="10" show-meridian="false"></timepicker>
+
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-12 text-center">
+                <div class="checkbox checkbox-success">
+                    <input type="checkbox" id="cbHolidayDay" name="cbHolidayDay" ng-model="selectedDay.Holiday" ng-change="changeHoliday(selectedDay.Holiday)">
+                    <label for="cbHolidayDay">
+                        Почивен ден
+                    </label>
+                </div>
+            </div>
+            
+        </div>
+        
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-default" ng-click="cancel()">Затвори</button>
+        <button type="button" class="btn btn-success" ng-click="ok()">Приеми</button>
+    </div>
+
+</script>
+
+<script type="text/ng-template" id="EmplDetailsModal.html">
+    <!-- Modal -->
+
+    <div class="modal-header">
+        <button type="button" class="close" ng-click="cancel()"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">
+            <span ng-show="insert">Нов служител</span>
+            <span ng-hide="insert">{{empl.FirstName + ' ' + empl.LastName}}</span>
+        </h4>
+    </div>
+    <div class="modal-body">
+        <alert type="{{alertEmpl.type}}" close="closeEmplAlert()" ng-show="alertEmpl">{{alertEmpl.msg}}</alert>
+        <form class="form-horizontal" ng-hide="isPositionLoading" name="empl_data"
+              novalidate ng-submit="emplFormSubmit(empl_data, empl)" role="form">
+            <div class="row">
+                <div class="col-sm-4" ng-show="hasId">
+                    <div class="thumbnail background-transperant">
+                        <img ng-src="{{empl.ImageUrl}}" ng-show="empl.ImageUrl" />
+                        <span ng-hide="empl.ImageUrl">Не сте добавили снимка!</span>
+
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12" ng-hide="empl.ImageUrl">
+                            <input type="file" nv-file-select="" uploader="uploader" />
+                            <button type="button" class="btn btn-success btn-s" ng-click="uploader.uploadAll()" ng-disabled="!uploader.getNotUploadedItems().length">
+                                <span class="glyphicon glyphicon-upload"></span> Качи
+                            </button>
+                            <p ng-show="FileTypesEmpl" class="text-bold text-center colour-red">Моля прикачвайте само снимки!</p>
+                        </div>
+                        <div class="col-sm-12" ng-show="empl.ImageUrl">
+                            <button type="button" class="btn btn-success btn-s" ng-click="deletePic()">
+                                <i class="fa fa-times"></i> Изтрий
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-8">
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label" for="inputEmpFirstName">Име</label>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control" id="inputEmpFirstName" name="firstName" maxlength="50" ng-model="empl.FirstName" placeholder="Име на служителя" required />
+                            <span class="text-bold text-danger"
+                                  ng-show="empl_data.firstName.$invalid && (!empl_data.firstName.$pristine || empl_data.$submitted)">
+                                Полето е задължително!
+                            </span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label" for="inputEmpMiddleName">Бащино име</label>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control" id="inputEmpMiddleName" maxlength="50" name="middleName" ng-model="empl.MiddleName" placeholder="Бащино име на служителя" />
+                            <span class="text-bold text-danger"
+                                  ng-show="empl_data.middleName.$invalid && (!empl_data.middleName.$pristine || empl_data.$submitted)">
+                                Полето е задължително!
+                            </span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label" for="inputEmpLastName">Фамилия</label>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control" id="inputEmpLastName" maxlength="50" name="lastName" ng-model="empl.LastName" placeholder="Фамилия на служителя" required />
+                            <span class="text-bold text-danger"
+                                  ng-show="empl_data.lastName.$invalid && (!empl_data.lastName.$pristine || empl_data.$submitted)">
+                                Полето е задължително!
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label" for="ddlPosition">Позиция</label>
+                        <div class="col-sm-9">
+                            <select ng-model="empl.PositionID" id="ddlPosition" name="ddlPosition" class="form-control hidden-placeholder-select"
+                                    ng-options="pos.PositionID as pos.PositionName for pos in positions" required>
+                                <option selected disabled value="">Моля, изберете...</option>
+
+                            </select>
+                            <span class="text-bold text-danger"
+                                  ng-show="empl_data.ddlPosition.$invalid && (!empl_data.ddlPosition.$pristine || empl_data.$submitted)">
+                                Полето е задължително!
+                            </span>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12 text-right">
+                            <button type="submit" class="btn btn-default">
+                                <span class="glyphicon glyphicon-floppy-save"></span> Запази
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </form>
+        <div class="loading-indicator" ng-show="isPositionLoading">
+            <svg class="spinner" width="65px" height="65px" viewBox="0 0 66 66" xmlns="http://www.w3.org/2000/svg">
+                <circle class="path" fill="none" stroke-width="6" stroke-linecap="round" cx="33" cy="33" r="30"></circle>
+            </svg>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-default" ng-click="cancel()">Затвори</button>
+    </div>
+
+</script>
+
+<script type="text/ng-template" id="PositionsModal.html">
+    <!-- Modal -->
+    <div class="modal-header">
+        <button type="button" class="close" ng-click="ok()"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">Позиции</h4>
+    </div>
+    <div class="modal-body">
+        <alert type="{{alertPos.type}}" close="closePosAlert()" ng-show="alertEmpl">{{alertPos.msg}}</alert>
+        <div class="table-container ovf" ng-hide="isPositionLoading">
+            <table st-table="rowCollection" class="table table-striped table-hover table-reserve">
+                <thead class="table-header">
+                    <tr>
+                        <th st-sort="FullName">Име на позицията</th>
+                        <th>Добавена на</th>
+                        <th style="width:100px;">&nbsp;</th>
+
+                    </tr>
+
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>
+                            <input type="text" class="form-control" id="inputPositionName" placeholder="Име на позицията" ng-model="positionToAdd.positionName">
+                        </td>
+                        <td>
+                            &nbsp;
+                        </td>
+                        <td>
+                            <button type="button" class="btn btn-success btn-sm" ng-disabled="!positionToAdd.positionName" ng-click="addPosition(positionToAdd.positionName)">
+                                <i class="fa fa-check"></i>
+                            </button>
+                            <button type="button" class="btn btn-danger btn-sm" ng-click="positionToAdd.positionName = null">
+                                <i class="fa fa-times"></i>
+                            </button>
+                        </td>
+                    </tr>
+                    <tr ng-repeat="pos in salonPositions">
+                        <td>
+                            <span ng-hide="pos.Editing">{{pos.PositionName}}</span>
+                            <input type="text" ng-model="pos.PositionNameNew" ng-init="pos.PositionNameNew = pos.PositionName" ng-show="pos.Editing" />
+                        </td>
+                        <td>
+                            {{pos.AddedOn | date:'short'}}
+                        </td>
+                        <td ng-hide="pos.Editing">
+                            <button type="button" class="btn btn-primary btn-sm" ng-click="pos.Editing = true">
+                                <i class="fa fa-pencil"></i>
+                            </button>
+                            <button type="button" class="btn btn-danger btn-sm" ng-click="deletePos(pos, $index)">
+                                <i class="fa fa-trash-o"></i>
+                            </button>
+                        </td>
+                        <td ng-show="pos.Editing">
+                            <button type="button" class="btn btn-primary btn-sm" ng-disabled="!pos.PositionNameNew" ng-click="updatePos(pos, $index)">
+                                <i class="fa fa-check"></i>
+                            </button>
+                            <button type="button" class="btn btn-danger btn-sm" ng-click="pos.Editing = false">
+                                <i class="fa fa-times"></i>
+                            </button>
+                        </td>
+                    </tr>
+
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <td colspan="5" class="text-center">
+                            <div st-pagination="" st-items-by-page="itemsByPage" st-displayed-pages="7"></div>
+                        </td>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+        <div class="loading-indicator" ng-show="isPositionLoading">
+            <svg class="spinner" width="65px" height="65px" viewBox="0 0 66 66" xmlns="http://www.w3.org/2000/svg">
+                <circle class="path" fill="none" stroke-width="6" stroke-linecap="round" cx="33" cy="33" r="30"></circle>
+            </svg>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-default" ng-click="ok()">Затвори</button>
+    </div>
+</script>
+
+<script type="text/ng-template" id="ServicesModal.html">
+    <!-- Modal -->
+
+    <div class="modal-header">
+        <button type="button" class="close" ng-click="cancel()"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">
+            <span ng-hide="hasId">Нова услуга</span>
+            <span ng-show="hasId">{{ser.ServiceName}}</span>
+        </h4>
+    </div>
+    <div class="modal-body">
+        <alert type="{{alertService.type}}" close="closeServiceAlert()" ng-show="alertService">{{alertService.msg}}</alert>
+        <form class="form-horizontal" ng-hide="isServiceLoading" name="ser_data"
+              novalidate ng-submit="serFormSubmit(ser_data, ser)" role="form">
+            <div class="row">
+                <div class="col-sm-4" ng-show="hasId">
+                    <div class="thumbnail background-transperant">
+                        <img ng-src="{{ser.ImageUrl}}" ng-show="ser.ImageUrl" />
+                        <span ng-hide="ser.ImageUrl">Не сте добавили снимка!</span>
+
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12" ng-hide="ser.ImageUrl">
+                            <input type="file" nv-file-select="" uploader="uploader" />
+                            <button type="button" class="btn btn-success btn-s" ng-click="uploader.uploadAll()" ng-disabled="!uploader.getNotUploadedItems().length">
+                                <span class="glyphicon glyphicon-upload"></span> Качи
+                            </button>
+                            <p ng-show="FileTypesService" class="text-bold text-center colour-red">Моля прикачвайте само снимки!</p>
+
+                        </div>
+                        <div class="col-sm-12" ng-show="ser.ImageUrl">
+                            <button type="button" class="btn btn-success btn-s" ng-click="deletePic()">
+                                <i class="fa fa-times"></i> Изтрий
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-8">
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label" for="inputServiceName">Име</label>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control" id="inputServiceName" name="serviceName"
+                                   placeholder="Име на услугата" ng-model="ser.ServiceName" required maxlength="150">
+                            <span class="text-bold text-danger"
+                                  ng-show="ser_data.serviceName.$invalid && (!ser_data.serviceName.$pristine || ser_data.$submitted)">
+                                Полето е задължително!
+                            </span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label" for="ddlType">Вид на услугата</label>
+                        <div class="col-sm-9">
+                            <select ng-model="ser.TypeID" id="ddlType" name="ddlType" class="form-control hidden-placeholder-select"
+                                    ng-options="type.TypeID as type.TypeName for type in types" required>
+                                <option selected disabled value="">Моля, изберете...</option>
+
+                            </select>
+                            <span class="text-bold text-danger"
+                                  ng-show="ser_data.ddlType.$invalid && (!ser_data.ddlType.$pristine || ser_data.$submitted)">
+                                Полето е задължително!
+                            </span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label" for="inputSerDescription">Описание</label>
+                        <div class="col-sm-9">
+                            <textarea class="form-control" id="inputSerDescription" placeholder="Описание"
+                                      name="SerDescription" required maxlength="500" rows="2"
+                                      ng-model="ser.Description"></textarea>
+                            <span class="text-bold text-danger"
+                                  ng-show="ser_data.SerDescription.$invalid && (!ser_data.SerDescription.$pristine || ser_data.$submitted)">
+                                Полето е задължително!
+                            </span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">Подходяща за</label>
+                        <div class="checkbox checkbox-success checkbox-isVisible">
+                            <input type="checkbox" id="cbWomen" name="women" ng-model="ser.Women">
+                            <label for="cbWomen">Жени</label>
+
+                        </div>
+                        <div class="checkbox checkbox-success checkbox-isVisible">
+                            <input type="checkbox" id="cbMen" name="men" ng-model="ser.Men">
+                            <label for="cbMen">Мъже</label>
+
+                        </div>
+                        <div class="checkbox checkbox-success checkbox-isVisible">
+                            <input type="checkbox" id="cbKids" name="kids" ng-model="ser.Kids">
+                            <label for="cbKids">Деца</label>
+                        </div>
+                        <div class="text-bold text-danger"
+                             ng-show="womenMenOrKid">
+                            Полето е задължително!
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">Времетраене</label>
+                        <div class="col-sm-9">
+                            <timepicker class="margin-0-auto" ng-model="ser.LocalTime" hour-step="1" minute-step="5" show-meridian="false"></timepicker>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label" for="inputPrice">Цена</label>
+                        <div class="col-sm-9">
+                            <div class="input-group">
+                                <input type="text" ng-model="ser.Price" name="price" id="inputPrice" ng-currency min="1" max="9999" class="form-control" step="0.01" required>
+                                <span class="input-group-addon">лв.</span>
+                            </div>
+                            <span class="text-bold text-danger"
+                                  ng-show="ser_data.price.$invalid && (!ser_data.price.$pristine || ser_data.$submitted)">
+                                Полето е задължително!
+                            </span>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12 text-right">
+                            <button type="submit" class="btn btn-success">
+                                <span class="glyphicon glyphicon-floppy-save"></span> Запази
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+        <div class="loading-indicator" ng-show="isServiceLoading">
+            <svg class="spinner" width="65px" height="65px" viewBox="0 0 66 66" xmlns="http://www.w3.org/2000/svg">
+                <circle class="path" fill="none" stroke-width="6" stroke-linecap="round" cx="33" cy="33" r="30"></circle>
+            </svg>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-default" ng-click="ok()">Затвори</button>
+    </div>
+
+</script>
