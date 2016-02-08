@@ -3,7 +3,7 @@
 'use strict';
 myApp.factory('authService', ['$http', '$q', 'localStorageService', function ($http, $q, localStorageService) {
 
-    var serviceBase = 'http://localhost:20000/api/';
+    var serviceBase = 'http://localhost:20000/';
     var authServiceFactory = {};
 
     var _authentication = {
