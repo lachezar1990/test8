@@ -10,26 +10,33 @@ using System.Threading.Tasks;
 using System.Web.Http;
 using System.Web.Http.Description;
 using WebApplicationppp.Models;
+using ZapaziMi.DAL.Entities.Cities;
+using ZapaziMi.WebAPI.Services.Cities;
 
 namespace WebApplicationppp.Controllers
 {
-    public class CitiesController : ApiController
+    [RoutePrefix("api/Cities")]
+    public class CitiesController : BaseApiController
     {
         private DiplomnaEntities db = new DiplomnaEntities();
+        private ICitiesService citiesService;
+
+        public CitiesController()
+        {
+            citiesService = new CitiesService();
+        }
 
         // GET: api/Cities
+        [HttpGet]
+        [Route("")]
+        [ResponseType(typeof(List<GetCityEntity>))]
         public async Task<IHttpActionResult> GetCities()
         {
-            var cities = await db.Cities.Select(x => new
-            {
-                CityID = x.CityID,
-                CityName = x.CityName
-            }).ToListAsync();
-
-            return Ok(cities);
+            return await GetMyResult(() => citiesService.GetCities());
         }
 
         // GET: api/Cities/5
+        [Route("{id:int}")]
         [ResponseType(typeof(City))]
         public async Task<IHttpActionResult> GetCity(int id)
         {
@@ -43,6 +50,7 @@ namespace WebApplicationppp.Controllers
         }
 
         // PUT: api/Cities/5
+        [HttpPut]
         [ResponseType(typeof(void))]
         public async Task<IHttpActionResult> PutCity(int id, City city)
         {
@@ -78,6 +86,7 @@ namespace WebApplicationppp.Controllers
         }
 
         // POST: api/Cities
+        [HttpPost]
         [ResponseType(typeof(City))]
         public async Task<IHttpActionResult> PostCity(City city)
         {
@@ -93,6 +102,7 @@ namespace WebApplicationppp.Controllers
         }
 
         // DELETE: api/Cities/5
+        [HttpDelete]
         [ResponseType(typeof(City))]
         public async Task<IHttpActionResult> DeleteCity(int id)
         {
