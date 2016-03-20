@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ZapaziMi.DAL", "ZapaziMi.DA
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ZapaziMi.WebAPI.Services", "ZapaziMi.WebAPI.Services\ZapaziMi.WebAPI.Services.csproj", "{F63AD94A-54E2-46EE-9C76-91191DEF48D2}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ZapaziMi.AdminSPA", "ZapaziMi.AdminSPA\ZapaziMi.AdminSPA.csproj", "{8820A28F-8C49-4C3B-86ED-A26F9C649231}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{F63AD94A-54E2-46EE-9C76-91191DEF48D2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F63AD94A-54E2-46EE-9C76-91191DEF48D2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F63AD94A-54E2-46EE-9C76-91191DEF48D2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8820A28F-8C49-4C3B-86ED-A26F9C649231}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8820A28F-8C49-4C3B-86ED-A26F9C649231}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8820A28F-8C49-4C3B-86ED-A26F9C649231}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8820A28F-8C49-4C3B-86ED-A26F9C649231}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
