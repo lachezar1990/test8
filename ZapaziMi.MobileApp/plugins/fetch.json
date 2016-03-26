@@ -1,0 +1,37 @@
+{
+    "com.ionic.keyboard": {
+        "source": {
+            "type": "git",
+            "url": "https://github.com/driftyco/ionic-plugin-keyboard",
+            "subdir": "."
+        }
+    },
+    "cordova-plugin-network-information": {
+        "source": {
+            "type": "git",
+            "url": "https://github.com/apache/cordova-plugin-network-information",
+            "subdir": "."
+        }
+    },
+    "nl.x-services.plugins.calendar": {
+        "source": {
+            "type": "git",
+            "url": "https://github.com/EddyVerbruggen/Calendar-PhoneGap-Plugin.git",
+            "subdir": "."
+        }
+    },
+    "org.apache.cordova.inappbrowser": {
+        "source": {
+            "type": "local",
+            "path": "C:\\Users\\Laptop\\.plugman\\cache\\org.apache.cordova.inappbrowser\\0.5.2\\package"
+        }
+    },
+    "org.apache.cordova.globalization": {
+        "source": {
+            "type": "registry",
+            "id": "org.apache.cordova.globalization@0.2.8"
+        },
+        "is_top_level": true,
+        "variables": {}
+    }
+}
