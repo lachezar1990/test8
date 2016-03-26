@@ -1100,6 +1100,10 @@
     <Compile Include="Models\UserModel.cs" />
     <Compile Include="Providers\ApplicationOAuthProvider.cs" />
     <Compile Include="Providers\SimpleAuthorizationServerProvider.cs" />
+    <Compile Include="Results\BadRequestActionResult.cs" />
+    <Compile Include="Results\InternalServerErrorActionResult.cs" />
+    <Compile Include="Results\NotFoundActionResult.cs" />
+    <Compile Include="Results\UnauthorizedActionResult.cs" />
     <Compile Include="Startup.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\AdminController.cs" />
@@ -1252,7 +1256,6 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Images\ServiceImages\" />
-    <Folder Include="Results\" />
     <Folder Include="Views\Shared\" />
   </ItemGroup>
   <ItemGroup>

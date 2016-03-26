@@ -30,9 +30,25 @@ namespace ZapaziMi.WebAPI.Services.Models
                 {
                     return ResponseStatuses.PartialSuccess;
                 }
+                else if (Errors.Count > 0 && Errors[0].ErrorType == ErrorTypes.Validation)
+                {
+                    return ResponseStatuses.BadRequest;
+                }
+                else if (Errors.Count > 0 && Errors[0].ErrorType == ErrorTypes.Unauthorized)
+                {
+                    return ResponseStatuses.Unauthorized;
+                }
+                else if (Errors.Count > 0 && Errors[0].ErrorType == ErrorTypes.NotFound)
+                {
+                    return ResponseStatuses.NotFound;
+                }
+                else if (Errors.Count > 0 && Errors[0].ErrorType == ErrorTypes.Exception)
+                {
+                    return ResponseStatuses.InternalServerError;
+                }
                 else
                 {
-                    return ResponseStatuses.Failure;
+                    return ResponseStatuses.Success;
                 }
             }
         }

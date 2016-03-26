@@ -40,13 +40,7 @@ namespace WebApplicationppp.Controllers
         [ResponseType(typeof(City))]
         public async Task<IHttpActionResult> GetCity(int id)
         {
-            City city = await db.Cities.FindAsync(id);
-            if (city == null)
-            {
-                return NotFound();
-            }
-
-            return Ok(city);
+            return await GetMyResult(() => citiesService.GetCityById(id));
         }
 
         // PUT: api/Cities/5

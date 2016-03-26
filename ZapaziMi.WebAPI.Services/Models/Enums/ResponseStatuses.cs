@@ -10,6 +10,9 @@
         /// Success but there are some warnings.
         /// </summary>
         PartialSuccess = 1,
-        Failure = 2
+        BadRequest = 400,
+        Unauthorized = 401,
+        NotFound = 404,
+        InternalServerError = 500
     }
 }

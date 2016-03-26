@@ -5,6 +5,7 @@ using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web.Http;
+using WebApplicationppp.Results;
 using ZapaziMi.WebAPI.Services.Models;
 
 namespace WebApplicationppp.Controllers
@@ -65,6 +66,29 @@ namespace WebApplicationppp.Controllers
 
             ResponseModel result = await data.Invoke();
             return Ok(result);
+        }
+
+        public async Task<IHttpActionResult> GetMyResult<T>(Func<Task<ResponseModel<T>>> data)
+        {
+            ResponseModel<T> returnData = await data.Invoke();
+
+            switch (returnData.ResponseStatus)
+            {
+                case ZapaziMi.WebAPI.Services.Models.Enums.ResponseStatuses.Success:
+                    return Ok(returnData);
+                case ZapaziMi.WebAPI.Services.Models.Enums.ResponseStatuses.PartialSuccess:
+                    return Ok(returnData); //may we have to refactor this?
+                case ZapaziMi.WebAPI.Services.Models.Enums.ResponseStatuses.BadRequest:
+                    return new BadRequestActionResult<ResponseModel<T>>(returnData, Request);
+                case ZapaziMi.WebAPI.Services.Models.Enums.ResponseStatuses.Unauthorized:
+                    return new UnauthorizedActionResult<ResponseModel<T>>(returnData, Request);
+                case ZapaziMi.WebAPI.Services.Models.Enums.ResponseStatuses.NotFound:
+                    return new NotFoundActionResult<ResponseModel<T>>(returnData, Request);
+                case ZapaziMi.WebAPI.Services.Models.Enums.ResponseStatuses.InternalServerError:
+                    return new InternalServerErrorActionResult<ResponseModel<T>>(returnData, Request);
+                default:
+                    return Ok(returnData);
+            }
         }
     }
 }

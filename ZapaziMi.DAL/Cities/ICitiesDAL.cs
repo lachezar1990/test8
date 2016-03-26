@@ -10,5 +10,6 @@ namespace ZapaziMi.DAL.Cities
     public interface ICitiesDAL
     {
         Task<List<GetCityEntity>> GetCities();
+        Task<GetCityEntity> GetCityById(int id);
     }
 }
