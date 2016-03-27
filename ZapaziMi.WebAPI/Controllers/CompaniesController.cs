@@ -10,137 +10,67 @@ using System.Threading.Tasks;
 using System.Web.Http;
 using System.Web.Http.Description;
 using WebApplicationppp.Models;
+using ZapaziMi.DAL.Entities.Companies;
+using ZapaziMi.WebAPI.Services.Companies;
+using ZapaziMi.WebAPI.Services.Models;
 
 namespace WebApplicationppp.Controllers
 {
-    public class CompaniesController : ApiController
+    public class CompaniesController : BaseApiController
     {
-        private DiplomnaEntities db = new DiplomnaEntities();
+        private ICompaniesService _companiesService;
+
+        public CompaniesController()
+        {
+            _companiesService = new CompaniesService();
+        }
 
         // GET: api/Companies
-        public IQueryable<Company> GetCompanies()
+        [HttpGet]
+        [Authorize(Roles = "SalonAdmin")]
+        [Route("api/Companies")]
+        [ResponseType(typeof(List<GetCompanyEntity>))]
+        public async Task<IHttpActionResult> GetCompanies()
         {
-            return db.Companies;
+            return await GetMyResult(() => _companiesService.GetCompanies());
         }
 
         // GET: api/Companies/5
+        [HttpGet]
         [Authorize(Roles = "SalonAdmin")]
         [Route("api/Companies/{username:maxlength(150)}")]
+        [ResponseType(typeof(GetCompanyByUsername))]
         public async Task<IHttpActionResult> GetCompany(string username)
         {
-            var company = await db.Companies.Where(x => x.CreateBy.ToUpper() == username.ToUpper() && !x.IsDeleted)
-                .Select(x => new
-                {
-                    CompanyAddress = x.AddressText,
-                    CityID = x.CityID,
-                    CompanyID = x.CompanyID,
-                    CompanyName = x.CompanyName,
-                    CreateBy = x.CreateBy,
-                    Email = x.Email,
-                    CompanyPhones = x.Phones
-                }).FirstOrDefaultAsync();
-
-            //if (company == null)
-            //{
-            //    return NotFound();
-            //}
-
-            return Ok(company);
+            return await GetMyResult(() => _companiesService.GetCompanyByUsername(username));
         }
 
         // PUT: api/Companies/5
+        [HttpPut]
         [Authorize(Roles = "SalonAdmin")]
-        [ResponseType(typeof(void))]
+        [ResponseType(typeof(ResponseModel))]
         [Route("api/Companies/{id:int}")]
-        public async Task<IHttpActionResult> PutCompany(int id, Company company)
+        public async Task<IHttpActionResult> PutCompany(int id, ZapaziMi.DAL.Entities.ZapaziMiDb.Company company)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
-            if (id != company.CompanyID)
-            {
-                return BadRequest();
-            }
-
-            Company companyFromDb = await db.Companies.FindAsync(id);
-
-            companyFromDb.AddressText = company.AddressText;
-            companyFromDb.CityID = company.CityID;
-            companyFromDb.CompanyName = company.CompanyName;
-            companyFromDb.Email = company.Email;
-            companyFromDb.Phones = company.Phones;
-
-            db.Entry(companyFromDb).State = EntityState.Modified;
-
-            try
-            {
-                await db.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!CompanyExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return StatusCode(HttpStatusCode.NoContent);
+            return await GetMyResultWithModelValidation(() => _companiesService.UpdateCompany(id, company));
         }
 
         // POST: api/Companies
+        [HttpPost]
         [Authorize(Roles = "SalonAdmin")]
         [ResponseType(typeof(Company))]
-        public async Task<IHttpActionResult> PostCompany(Company company)
+        public async Task<IHttpActionResult> PostCompany(ZapaziMi.DAL.Entities.ZapaziMiDb.Company company)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
-            company.AddedOn = DateTime.Now;
-            company.IsDeleted = false;
-
-            db.Companies.Add(company);
-            await db.SaveChangesAsync();
-
-            return CreatedAtRoute("DefaultApi", new { id = company.CompanyID }, company);
+            return await GetMyInsertResultWithModelValidation(() => _companiesService.InsertCompany(company));
         }
 
         // DELETE: api/Companies/5
+        [HttpDelete]
         [Authorize(Roles = "SalonAdmin")]
-        [ResponseType(typeof(Company))]
+        [ResponseType(typeof(ResponseModel<Company>))]
         public async Task<IHttpActionResult> DeleteCompany(int id)
         {
-            Company company = await db.Companies.FindAsync(id);
-            if (company == null)
-            {
-                return NotFound();
-            }
-
-            db.Companies.Remove(company);
-            await db.SaveChangesAsync();
-
-            return Ok(company);
-        }
-
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                db.Dispose();
-            }
-            base.Dispose(disposing);
-        }
-
-        private bool CompanyExists(int id)
-        {
-            return db.Companies.Count(e => e.CompanyID == id) > 0;
+            return await GetMyResult(() => _companiesService.DeleteCompany(id));
         }
     }
 }

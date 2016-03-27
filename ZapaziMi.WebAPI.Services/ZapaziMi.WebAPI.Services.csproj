@@ -42,6 +42,8 @@
   <ItemGroup>
     <Compile Include="Cities\CitiesService.cs" />
     <Compile Include="Cities\ICitiesService.cs" />
+    <Compile Include="Companies\CompaniesService.cs" />
+    <Compile Include="Companies\ICompaniesService.cs" />
     <Compile Include="Models\Enums\ErrorTypes.cs" />
     <Compile Include="Models\Enums\ResponseStatuses.cs" />
     <Compile Include="Models\Error.cs" />

@@ -9,30 +9,36 @@ namespace ZapaziMi.DAL.Cities
 {
     public class CitiesDAL : ICitiesDAL
     {
-        private Diplomna_newEntities db = new Diplomna_newEntities();
+        private Diplomna_newEntities db;
 
         public async Task<List<GetCityEntity>> GetCities()
         {
-            List<GetCityEntity> cities = await db.Cities.Select(x => new GetCityEntity
+            using (db = new Diplomna_newEntities())
             {
-                CityId = x.CityID,
-                CityName = x.CityName
-            }).ToListAsync();
+                List<GetCityEntity> cities = await db.Cities.Select(x => new GetCityEntity
+                {
+                    CityId = x.CityID,
+                    CityName = x.CityName
+                }).ToListAsync();
 
-            return cities;
+                return cities;
+            }
         }
 
         public async Task<GetCityEntity> GetCityById(int id)
         {
-            GetCityEntity city = await db.Cities
-                .Where(x => x.CityID == id)
-                .Select(x => new GetCityEntity
+            using (db = new Diplomna_newEntities())
             {
-                CityId = x.CityID,
-                CityName = x.CityName
-            }).FirstOrDefaultAsync();
+                GetCityEntity city = await db.Cities
+                    .Where(x => x.CityID == id)
+                    .Select(x => new GetCityEntity
+                    {
+                        CityId = x.CityID,
+                        CityName = x.CityName
+                    }).FirstOrDefaultAsync();
 
-            return city;
+                return city;
+            }
         }
     }
 }

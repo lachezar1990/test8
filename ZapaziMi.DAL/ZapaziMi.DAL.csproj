@@ -53,7 +53,11 @@
   <ItemGroup>
     <Compile Include="Cities\CitiesDAL.cs" />
     <Compile Include="Cities\ICitiesDAL.cs" />
+    <Compile Include="Companies\CompaniesDAL.cs" />
+    <Compile Include="Companies\ICompaniesDAL.cs" />
     <Compile Include="Entities\Cities\GetCityEntity.cs" />
+    <Compile Include="Entities\Companies\GetCompanyByUsername.cs" />
+    <Compile Include="Entities\Companies\GetCompanyEntity.cs" />
     <Compile Include="Entities\ZapaziMiDb\Address.cs">
       <DependentUpon>ZapaziMiDb.tt</DependentUpon>
     </Compile>
