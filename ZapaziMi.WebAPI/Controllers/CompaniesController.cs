@@ -20,9 +20,9 @@ namespace WebApplicationppp.Controllers
     {
         private ICompaniesService _companiesService;
 
-        public CompaniesController()
+        public CompaniesController(ICompaniesService companiesService)
         {
-            _companiesService = new CompaniesService();
+            _companiesService = companiesService;
         }
 
         // GET: api/Companies

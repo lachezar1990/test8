@@ -14,9 +14,9 @@ namespace ZapaziMi.WebAPI.Services.Companies
     {
         private ICompaniesDAL _companiesDal;
 
-        public CompaniesService()
+        public CompaniesService(ICompaniesDAL companiesDal)
         {
-            _companiesDal = new CompaniesDAL();
+            _companiesDal = companiesDal;
         }
 
         public async Task<List<GetCompanyEntity>> GetCompanies()

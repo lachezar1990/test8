@@ -19,11 +19,11 @@ namespace WebApplicationppp.Controllers
     public class CitiesController : BaseApiController
     {
         private DiplomnaEntities db = new DiplomnaEntities();
-        private ICitiesService citiesService;
+        private ICitiesService _citiesService;
 
-        public CitiesController()
+        public CitiesController(ICitiesService citiesService)
         {
-            citiesService = new CitiesService();
+            _citiesService = citiesService;
         }
 
         // GET: api/Cities
@@ -32,7 +32,7 @@ namespace WebApplicationppp.Controllers
         [ResponseType(typeof(List<GetCityEntity>))]
         public async Task<IHttpActionResult> GetCities()
         {
-            return await GetMyResult(() => citiesService.GetCities());
+            return await GetMyResult(() => _citiesService.GetCities());
         }
 
         // GET: api/Cities/5
@@ -40,7 +40,7 @@ namespace WebApplicationppp.Controllers
         [ResponseType(typeof(City))]
         public async Task<IHttpActionResult> GetCity(int id)
         {
-            return await GetMyResult(() => citiesService.GetCityById(id));
+            return await GetMyResult(() => _citiesService.GetCityById(id));
         }
 
         // PUT: api/Cities/5

@@ -12,22 +12,22 @@ namespace ZapaziMi.WebAPI.Services.Cities
 {
     public class CitiesService : ICitiesService
     {
-        private ICitiesDAL citiesDal;
+        private ICitiesDAL _citiesDal;
 
-        public CitiesService()
+        public CitiesService(ICitiesDAL citiesDal)
         {
-            citiesDal = new CitiesDAL();
+            _citiesDal = citiesDal;
         }
 
         public async Task<List<GetCityEntity>> GetCities()
         {
-            return await citiesDal.GetCities();
+            return await _citiesDal.GetCities();
         }
 
         public async Task<ResponseModel<GetCityEntity>> GetCityById(int id)
         {
             ResponseModel<GetCityEntity> result = new ResponseModel<GetCityEntity>();
-            GetCityEntity city = await citiesDal.GetCityById(id);
+            GetCityEntity city = await _citiesDal.GetCityById(id);
             if (city == null)
             {
                 result.Errors.Add(new Error()
